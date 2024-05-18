@@ -33,7 +33,15 @@ async function run() {
         const reviewColl = database.collection('review')
 
         app.get('/menu', async (req, res) => {
-            const result = await menuColl.find().toArray()
+            let query = {}
+            let limit = 0
+            if (req.query.category) {
+                query = { category: req.query.category }
+            }
+            if (req.query.limit) {
+                limit = parseInt(req.query.limit)
+            }
+            const result = await menuColl.find(query).limit(limit).toArray()
             res.send(result)
         })
 
