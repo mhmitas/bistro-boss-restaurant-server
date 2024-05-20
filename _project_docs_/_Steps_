@@ -18,8 +18,9 @@
 3. add krito data cart collection e post kori . and succes message show kori
 
 ## 67-4 Simple Overview of react query and load data
-1. first create an api to load all cart data(temporary gono-hare)
-2. 
+1. first create an api to load all cart data(temporary sobgulo eksathe)
+2. then , react query setup kore useCart hook er moddhe useQuery() use kori. ekhane use query onek kichu return kore but ami first e just data & refetch ke nilam 
+3. inside the useQuery: queryKey: queryFn: 
 
 
 
