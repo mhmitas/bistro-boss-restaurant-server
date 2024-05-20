@@ -1,0 +1,42 @@
+/*
+# Milestone 12 | module - 67:
+
+## 67-1 Module intro and cart icon set up
+1. create a cart icon in the navbar and add click event handler to the add to card button.
+2. and thinking about how to manage state after clinking add to card button. 
+
+
+## 67-2 Enforce user to login before add to cart
+- please login to add item to the cart
+- created an api to the server to post added item to the cart collection
+
+## 68-3 Save cart data to the server using Axios 
+- fixed some redirect issue.
+-----
+1. now i want send card data to database when a user add an item to the cart.
+2. ekti hook create kori for axios to easily get the base url and for other benifites.
+3. add krito data cart collection e post kori . and succes message show kori
+
+## 67-4 Simple Overview of react query and load data
+1. first create an api to load all cart data(temporary gono-hare)
+2. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
