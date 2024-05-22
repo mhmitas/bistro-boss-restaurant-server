@@ -54,16 +54,36 @@ async function run() {
         })
 
         // cart collection
-        app.get('/carts', async (req, res) => {
-            const uid = req.query?.uid
+        app.get('/carts/:uid', async (req, res) => {
+            const uid = req.params.uid
             let query = { userId: uid }
             const result = await cartColl.find(query).toArray()
             res.send(result)
         })
 
+        // get cart items added by the user
+        app.get('/menu-items/:uid', async (req, res) => {
+            const uid = req.params.uid
+            let query = { userId: uid }
+            const items = await cartColl.find(query).toArray()
+            console.log(items)
+            const itemIds = items.map(item => item.itemId)
+            const objectIds = itemIds.map(id => ObjectId.createFromHexString(id))
+            const filter = { _id: { $in: objectIds } }
+            const menuItems = await menuColl.find(filter).toArray()
+            res.send(menuItems)
+        })
+
         app.post('/carts', async (req, res) => {
             const cart = req.body;
             const result = await cartColl.insertOne(cart);
+            res.send(result)
+        })
+
+        app.delete('/carts/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { itemId: id }
+            const result = await cartColl.deleteOne(query)
             res.send(result)
         })
 
