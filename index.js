@@ -30,9 +30,44 @@ async function run() {
     try {
         const database = client.db('bistroDB')
         const menuColl = database.collection('menu')
+        const userColl = database.collection('users')
         const reviewColl = database.collection('review')
         const cartColl = database.collection('carts')
 
+        // Users Related APIs //
+        app.get('/users', async (req, res) => {
+            const result = await userColl.find().toArray()
+            res.send(result)
+        })
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            // insert email if user doesn't exists
+            const query = { email: user.email }
+            const isExist = await userColl.findOne(query)
+            if (isExist) {
+                return res.send({ message: 'user already exists', insertedId: null })
+            }
+            const result = await userColl.insertOne(user)
+            res.send(result)
+        })
+
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await userColl.deleteOne(query)
+            res.send(result)
+        })
+
+        app.patch('/users/admin/:id', async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: new ObjectId(id) }
+            const updateDoc = { $set: { role: 'admin' } }
+            const result = await userColl.updateOne(filter, updateDoc)
+            res.send(result)
+        })
+
+        // menu items related APIs //
         // get menu from db
         app.get('/menu', async (req, res) => {
             let query = {}
@@ -66,7 +101,6 @@ async function run() {
             const uid = req.params.uid
             let query = { userId: uid }
             const items = await cartColl.find(query).toArray()
-            console.log(items)
             const itemIds = items.map(item => item.itemId)
             const objectIds = itemIds.map(id => ObjectId.createFromHexString(id))
             const filter = { _id: { $in: objectIds } }
