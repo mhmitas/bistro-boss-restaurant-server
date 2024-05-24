@@ -11,7 +11,6 @@ app.use(express.json())
 
 // my middlewares;
 const verifyToken = (req, res, next) => {
-    // console.log('from verify tokne middleware', req.headers)
     if (!req.headers.authorization) {
         return res.status(401).send({ message: 'forbidden access' })
     }

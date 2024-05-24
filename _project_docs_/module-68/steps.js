@@ -30,7 +30,7 @@ ____________________________
 ~ so I will use jwt() | install jwt token and require it
 
 ____________________________
-## (Recap) Create a JWT token and save it on local storage
+## 68-7 (Recap) Create a JWT token and save it on local storage
 ~ create jwt token: go to jwt repo --> create a token(server) and send it with res. --> recive this token and save it in the local storage and when log out remove this token
 ~ now i will send the token with request: so that (Request Config)using `headers (`headers` are custom headers to be sent) i will send it to the server --> verify the token in a middleware --> 
 
