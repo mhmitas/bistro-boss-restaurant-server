@@ -16,8 +16,19 @@ const verifyToken = (req, res, next) => {
         return res.status(401).send({ message: 'forbidden access' })
     }
     const token = req.headers.authorization.split(' ')[1]
-    console.log(token)
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: 'forbidden access' })
+        }
+        req.user = decoded
+        next()
+    })
 }
+
+// function verifyUser(req, res, next) {
+//     console.log('uid:', req.user.uid);
+//     next()
+// }
 
 
 app.get('/', (req, res) => {
@@ -54,10 +65,24 @@ async function run() {
 
         // Users Related APIs //
         app.get('/users', verifyToken, async (req, res) => {
-            // vul val jaigai console.log korle kaj hobe na.
-            console.log(req.headers)
             const result = await userColl.find().toArray()
             res.send(result)
+        })
+
+        app.get('/users/admin/:uid', verifyToken, async (req, res) => {
+            const uid = req.params.uid;
+            if (uid !== req.user.uid) {
+                return res.status(403).send({ message: 'unAuthorized access' })
+            }
+            const query = { uid: uid }
+            const user = await userColl.findOne(query)
+            console.log(uid)
+            let admin = false
+            if (user) {
+                // checking if role present in the user : does the role is admin ?
+                admin = user?.role === 'admin'
+            }
+            res.send({ admin })
         })
 
         app.post('/users', async (req, res) => {
@@ -73,7 +98,7 @@ async function run() {
         })
 
         app.delete('/users/:id', async (req, res) => {
-            const id = req.params.id
+            const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await userColl.deleteOne(query)
             res.send(result)
