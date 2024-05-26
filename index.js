@@ -9,26 +9,6 @@ const port = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
 
-// my middlewares;
-const verifyToken = (req, res, next) => {
-    if (!req.headers.authorization) {
-        return res.status(401).send({ message: 'forbidden access' })
-    }
-    const token = req.headers.authorization.split(' ')[1]
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).send({ message: 'forbidden access' })
-        }
-        req.user = decoded
-        next()
-    })
-}
-
-// function verifyUser(req, res, next) {
-//     console.log('uid:', req.user.uid);
-//     next()
-// }
-
 
 app.get('/', (req, res) => {
     res.send('BISTRO BOSS RESTAURENT SERVER')
@@ -47,13 +27,44 @@ const client = new MongoClient(uri, {
     }
 });
 
+const database = client.db('bistroDB')
+const menuColl = database.collection('menu')
+const userColl = database.collection('users')
+const reviewColl = database.collection('review')
+const cartColl = database.collection('carts')
+
+// my middlewares;
+const verifyToken = (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(401).send({ message: 'unAuthorize access' })
+    }
+    const token = req.headers.authorization.split(' ')[1]
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: 'unAuthorize access' })
+        }
+        req.user = decoded
+        next()
+    })
+}
+
+// function verifyUser(req, res, next) {
+//     console.log('uid:', req.user.uid);
+//     next()
+// }
+
+async function verifyAdmin(req, res, next) {
+    const uid = req.user.uid;
+    const query = { uid: uid }
+    const user = await userColl.findOne(query)
+    const isAdmin = user?.role === 'admin'
+    if (!isAdmin) {
+        return res.status(403).send({ message: 'Forbidden Access' })
+    }
+}
+
 async function run() {
     try {
-        const database = client.db('bistroDB')
-        const menuColl = database.collection('menu')
-        const userColl = database.collection('users')
-        const reviewColl = database.collection('review')
-        const cartColl = database.collection('carts')
 
         // JWT related APIs
         app.post('/jwt', async (req, res) => {
@@ -63,19 +74,19 @@ async function run() {
         })
 
         // Users Related APIs //
-        app.get('/users', verifyToken, async (req, res) => {
+        app.get('/users', verifyToken, verifyAdmin, async (req, res) => {
             const result = await userColl.find().toArray()
             res.send(result)
         })
 
         app.get('/users/admin/:uid', verifyToken, async (req, res) => {
             const uid = req.params.uid;
+            // Checking... is this the token of the user who made the request ?
             if (uid !== req.user.uid) {
-                return res.status(403).send({ message: 'unAuthorized access' })
+                return res.status(403).send({ message: 'Forbidden Access' })
             }
             const query = { uid: uid }
             const user = await userColl.findOne(query)
-            console.log(uid)
             let admin = false
             if (user) {
                 // checking if role present in the user : does the role is admin ?

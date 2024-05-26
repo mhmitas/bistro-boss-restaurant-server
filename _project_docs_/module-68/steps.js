@@ -36,8 +36,29 @@ ____________________________
 
 ____________________________
 ## 68-8 (Advanced) Verify token and axios interceptor:
-~ now i will verify the token in the middleware: use jwt.verify() to veriry the token.
-~ i will not use this token for a single time. I need it to send to the server multiple time. so i will do some kahini in useAxiosSecure()
+~ now i will verify the token in the middleware: use jwt.verify() to veriry the token in the verifyToken middleware.
+~ i have this token available in client side and  i will not use this token for a single time. I need it to send to the server multiple time. so i will do some kahini in useAxiosSecure(). use headers to send the token with request in the axios inteceptor. --> get stutus code in interceptors.response.. [write functions following the axios docs]
+
+____________________________
+## 68-9 Logout unauthorize access and check is admin
+~ For 401 or 403 status logout the user and navigate to the home page.
+~ Here need to work for some security fix. -->to get the admin properly. --> create an api in the server to verify the admin(/users/admin/:uid). --> create an hook useAdmin, from where i will call this api  
+
+************
+create jwt token --> verify jwt token -->
+************
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
