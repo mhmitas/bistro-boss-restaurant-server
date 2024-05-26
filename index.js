@@ -47,20 +47,16 @@ const verifyToken = (req, res, next) => {
         next()
     })
 }
-
-// function verifyUser(req, res, next) {
-//     console.log('uid:', req.user.uid);
-//     next()
-// }
-
+//  Before verify admin must verify token |
 async function verifyAdmin(req, res, next) {
-    const uid = req.user.uid;
-    const query = { uid: uid }
+    const email = req.user.email;
+    const query = { email: email }
     const user = await userColl.findOne(query)
     const isAdmin = user?.role === 'admin'
     if (!isAdmin) {
         return res.status(403).send({ message: 'Forbidden Access' })
     }
+    next()
 }
 
 async function run() {
@@ -74,18 +70,19 @@ async function run() {
         })
 
         // Users Related APIs //
+        // get all users by admin
         app.get('/users', verifyToken, verifyAdmin, async (req, res) => {
             const result = await userColl.find().toArray()
             res.send(result)
         })
 
-        app.get('/users/admin/:uid', verifyToken, async (req, res) => {
-            const uid = req.params.uid;
+        app.get('/users/admin/:email', verifyToken, async (req, res) => {
+            const email = req.params.email;
             // Checking... is this the token of the user who made the request ?
-            if (uid !== req.user.uid) {
+            if (email !== req.user.email) {
                 return res.status(403).send({ message: 'Forbidden Access' })
             }
-            const query = { uid: uid }
+            const query = { email: email }
             const user = await userColl.findOne(query)
             let admin = false
             if (user) {
@@ -95,6 +92,7 @@ async function run() {
             res.send({ admin })
         })
 
+        // post user to database
         app.post('/users', async (req, res) => {
             const user = req.body;
             // insert email if user doesn't exists
@@ -107,14 +105,16 @@ async function run() {
             res.send(result)
         })
 
-        app.delete('/users/:id', async (req, res) => {
+        // Delete user by admin
+        app.delete('/users/:id', verifyToken, verifyAdmin, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await userColl.deleteOne(query)
             res.send(result)
         })
 
-        app.patch('/users/admin/:id', async (req, res) => {
+        // change role of the user by admin
+        app.patch('/users/admin/:id', verifyToken, verifyAdmin, async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
             const updateDoc = { $set: { role: 'admin' } }
@@ -144,17 +144,17 @@ async function run() {
         })
 
         // cart collection
-        app.get('/carts/:uid', async (req, res) => {
-            const uid = req.params.uid
-            let query = { userId: uid }
+        app.get('/carts/:email', async (req, res) => {
+            const email = req.params.email
+            let query = { userEmail: email }
             const result = await cartColl.find(query).toArray()
             res.send(result)
         })
 
         // get cart items added by the user
-        app.get('/menu-items/:uid', async (req, res) => {
-            const uid = req.params.uid
-            let query = { userId: uid }
+        app.get('/menu-items/:email', async (req, res) => {
+            const email = req.params.email
+            let query = { userEmail: email }
             const items = await cartColl.find(query).toArray()
             const itemIds = items.map(item => item.itemId)
             const objectIds = itemIds.map(id => ObjectId.createFromHexString(id))

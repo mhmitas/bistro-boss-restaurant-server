@@ -45,15 +45,22 @@ ____________________________
 ~ Here need to work for some security fix. -->to get the admin properly. --> create an api in the server to verify the admin(/users/admin/:uid). --> create an hook useAdmin, from where i will call this api  
 
 ************
-create jwt token --> verify jwt token -->
+create jwt token --> verify jwt token --> verify admin
 ************
 
+_______________________________
+## 68-10 (Advanced) make user api secure using verify admin
 
 
 
+////////////////////////////////
+//   Final Project Part-6     //
+////////////////////////////////
 
+// Module 69: Final Project Part-6
 
-
+## 69-1 (Recap)  Why We Use React-query, axios, and reacat hook form
+~ 
 
 
 
