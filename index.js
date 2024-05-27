@@ -36,7 +36,7 @@ const cartColl = database.collection('carts')
 // my middlewares;
 const verifyToken = (req, res, next) => {
     if (!req.headers.authorization) {
-        return res.status(401).send({ message: 'unAuthorize access' })
+        return res.status(404).send({ message: 'unAuthorize access' })
     }
     const token = req.headers.authorization.split(' ')[1]
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
@@ -125,15 +125,22 @@ async function run() {
         // menu items related APIs //
         // get menu from db
         app.get('/menu', async (req, res) => {
-            let query = {}
-            let limit = 0
+            let query = {};
+            let limit = 0;
+            let sort = { _id: -1 };
             if (req.query.category) {
                 query = { category: req.query.category }
             }
             if (req.query.limit) {
                 limit = parseInt(req.query.limit)
             }
-            const result = await menuColl.find(query).limit(limit).toArray()
+            const result = await menuColl.find(query).sort(sort).limit(limit).toArray()
+            res.send(result)
+        })
+
+        app.post('/menu', verifyToken, verifyAdmin, async (req, res) => {
+            const item = req.body
+            const result = await menuColl.insertOne(item)
             res.send(result)
         })
 

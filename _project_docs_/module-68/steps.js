@@ -58,12 +58,26 @@ _______________________________
 ////////////////////////////////
 
 // Module 69: Final Project Part-6
-
+_______________________________
 ## 69-1 (Recap)  Why We Use React-query, axios, and reacat hook form
 ~ 
 
+______________________________
+## 69-2 create add item form using react hook from .
 
 
+______________________________
+## 69-3 Design from using daisy ui and react hook form .
+
+
+______________________________
+## 69-4 Upload imgae to image hosting server imgBB and get image url
+~ here i have learned uploaing image to imgBB in a new methode
+--> {headers: {"content-type": 'multipart/form-data}}
+~ 
+
+______________________________
+## 69-5 Save menu item to the server and make api secure
 
 
 
