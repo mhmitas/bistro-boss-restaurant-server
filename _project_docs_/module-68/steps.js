@@ -86,9 +86,30 @@ ______________________________
 
 
 ______________________________
-## 69-6 Delete Menu item with verify admin middleware
+## 69-7 Delete Menu item with verify admin middleware
+    .
+    .
+    .
+    .
+    .
+    . in this module last i worked with delete and update items by the admin.
+    // TODO: IMPLEMENT UPDATE FUNCTIONALITY IN MANAGE ITEM PAGE
+    ```````````````````````````````````````````````````````````` 
+_______________________________________
 
 
+////////////////////////////////
+//   Final Project Part-7     //
+////////////////////////////////
+
+# Module 70: Final project part 7
+
+## 70-1 module overview and create payment route
+~ know some info about payment system
+~ created a payment route
+
+## 70-2: Install stripe, stripe for react and create card element
+~ 
 
 
 
