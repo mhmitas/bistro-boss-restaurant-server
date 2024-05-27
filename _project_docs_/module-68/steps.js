@@ -78,10 +78,15 @@ ______________________________
 
 ______________________________
 ## 69-5 Save menu item to the server and make api secure
+~ post a item doc to the mongodb
 
 
+______________________________
+## 69-6 create manage-items admin route and load all menu items
 
 
+______________________________
+## 69-6 Delete Menu item with verify admin middleware
 
 
 

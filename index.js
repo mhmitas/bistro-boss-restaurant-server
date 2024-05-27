@@ -36,7 +36,7 @@ const cartColl = database.collection('carts')
 // my middlewares;
 const verifyToken = (req, res, next) => {
     if (!req.headers.authorization) {
-        return res.status(404).send({ message: 'unAuthorize access' })
+        return res.status(401).send({ message: 'unAuthorize access' })
     }
     const token = req.headers.authorization.split(' ')[1]
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
@@ -76,6 +76,7 @@ async function run() {
             res.send(result)
         })
 
+        // checking is the user is an admin or not 
         app.get('/users/admin/:email', verifyToken, async (req, res) => {
             const email = req.params.email;
             // Checking... is this the token of the user who made the request ?
@@ -138,9 +139,17 @@ async function run() {
             res.send(result)
         })
 
+        // post a new menu itme to the database
         app.post('/menu', verifyToken, verifyAdmin, async (req, res) => {
             const item = req.body
             const result = await menuColl.insertOne(item)
+            res.send(result)
+        })
+
+        app.delete('/menu/:id', verifyToken, verifyAdmin, async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await menuColl.deleteOne(query)
             res.send(result)
         })
 
