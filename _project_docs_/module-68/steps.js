@@ -104,18 +104,31 @@ _______________________________________
 
 # Module 70: Final project part 7
 
+____________________________
 ## 70-1 module overview and create payment route
 ~ know some info about payment system
 ~ created a payment route
 
-## 70-2: Install stripe, stripe for react and create card element
+____________________________
+## 70-2 Install stripe, stripe for react and create card element
+~ install stripe and stripe-react. follow a stripe docs minimal example and create a card element.
+
+
+____________________________
+## 70-3 Create Stripe account and use publishable Key.
+~ stripe website > for developers(test mode) > get the pk.
+~ add functionality in the Checkout form component following the stripe docs.
+
+
+ * install stripe and stripe react * create card element * create stripe account and get publishable kay * use pk and use stripe to get card information and error
+
+
+____________________________
+## 70-4 Display card error and create serer side payment intents
+~ create a error state and display error message.
+~ then go to react.js stripe and browse payment page.
+~ install stripe node librery in server.
 ~ 
-
-
-
-
-
-
 
 
 

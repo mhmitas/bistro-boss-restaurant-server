@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
+const stripe = require('stripe')(process.env.STRIPE_SECRER_KEY)
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -168,7 +169,7 @@ async function run() {
         })
 
         // get cart items added by the user
-        app.get('/menu-items/:email', async (req, res) => {
+        app.get('/cart-items/:email', async (req, res) => {
             const email = req.params.email
             let query = { userEmail: email }
             const items = await cartColl.find(query).toArray()
@@ -190,6 +191,21 @@ async function run() {
             const query = { itemId: id }
             const result = await cartColl.deleteOne(query)
             res.send(result)
+        })
+
+        // Payment intend
+        app.post('/create-payment-intent', async (req, res) => {
+            const { price } = req.body
+            const amount = parseInt(price * 100)
+            console.log(amount)
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ["card"],
+            })
+            res.send({
+                clientSecret: paymentIntent.client_secret
+            })
         })
 
         await client.db("admin").command({ ping: 1 });
