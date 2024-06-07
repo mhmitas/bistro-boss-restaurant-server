@@ -59,7 +59,7 @@ _______________________________
 
 // Module 69: Final Project Part-6
 _______________________________
-## 69-1 (Recap)  Why We Use React-query, axios, and reacat hook form
+## 69-1 (Recap)  Why We Use React-query, axios, and react hook form
 ~ 
 
 ______________________________
@@ -71,8 +71,8 @@ ______________________________
 
 
 ______________________________
-## 69-4 Upload imgae to image hosting server imgBB and get image url
-~ here i have learned uploaing image to imgBB in a new methode
+## 69-4 Upload image to image hosting server imgBB and get image url
+~ here i have learned uploading image to imgBB in a new method
 --> {headers: {"content-type": 'multipart/form-data}}
 ~ 
 
@@ -110,25 +110,35 @@ ____________________________
 ~ created a payment route
 
 ____________________________
-## 70-2 Install stripe, stripe for react and create card element
-~ install stripe and stripe-react. follow a stripe docs minimal example and create a card element.
+## 70-2 Install stripe in client, stripe for react and create card element
+~ install stripe and stripe-react. follow a stripe docs minimal from github example and create a card element.
 
 
 ____________________________
 ## 70-3 Create Stripe account and use publishable Key.
 ~ stripe website > for developers(test mode) > get the pk.
-~ add functionality in the Checkout form component following the stripe docs.
+~ Add functionality in the Checkout form component following the stripe docs.
 
-
- * install stripe and stripe react * create card element * create stripe account and get publishable kay * use pk and use stripe to get card information and error
-
+|
+* install stripe and stripe react * create card element * create stripe account and get publishable kay * use pk and use stripe to get card information and error
+|
 
 ____________________________
-## 70-4 Display card error and create serer side payment intents
+## 70-4 Display card error and create server side payment intents
 ~ create a error state and display error message.
 ~ then go to react.js stripe and browse payment page.
-~ install stripe node librery in server.
+~ install stripe node library in server.
+~ create a post api in server which takes price and create a client secret and send with res. 
+.
+.
+.
+.
+## 70-6 created payment:
+
+____________________________
+## 70-7 Save payment info and delete cart items in the database:
 ~ 
+
 
 
 
