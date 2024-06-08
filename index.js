@@ -30,9 +30,11 @@ const client = new MongoClient(uri, {
 
 const database = client.db('bistroDB')
 const menuColl = database.collection('menu')
+const newMenuColl = database.collection('new_menu')
 const userColl = database.collection('users')
 const reviewColl = database.collection('review')
 const cartColl = database.collection('carts')
+const paymentColl = database.collection('payments')
 
 // my middlewares;
 const verifyToken = (req, res, next) => {
@@ -139,8 +141,26 @@ async function run() {
             const result = await menuColl.find(query).sort(sort).limit(limit).toArray()
             res.send(result)
         })
+        // get all menu items
+        app.get('/new-menu', async (req, res) => {
+            const skip = parseInt(req.query?.skip) || 0;
+            const limit = parseInt(req.query?.limit) || 10;
+            const result = await newMenuColl.find()
+                .sort({ _id: 1 })
+                .skip(skip)
+                .limit(limit)
+                .toArray()
+            res.send(result)
+        })
 
-        // post a new menu itme to the database
+        // get total number of items in menu
+        app.get('/menu-count', async (req, res) => {
+            const count = await newMenuColl.estimatedDocumentCount()
+            console.log(count)
+            res.send({ count })
+        })
+
+        // post a new menu item to the database
         app.post('/menu', verifyToken, verifyAdmin, async (req, res) => {
             const item = req.body
             const result = await menuColl.insertOne(item)
